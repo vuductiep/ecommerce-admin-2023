@@ -2,9 +2,10 @@
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": true
     },
-    "eslint.validate": ["javascript"],
+    "eslint.validate": ["javascript", "typescripts"],
     "files.autoSave": "afterDelay",
     "files.autoSaveDelay": 1000,
     "editor.tabSize": 2,
-    "editor.detectIndentation": false
+    "editor.detectIndentation": false,
+    "editor.insertSpaces": true
 }
