@@ -5,6 +5,7 @@ import Heading from "@/components/ui/Heading"
 import { ApiAlert } from "@/components/ui/api-alert"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import ImageUpload from "@/components/ui/image-upload"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { useOrigin } from "@/hooks/use-origin"
@@ -37,7 +38,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
 
   const title = initialData ? "Edit a billboard" : "Create billboard"
   const description = initialData ? "Edit a billboard" : "Add a new billboard"
-  const toastMessage = initialData ? "Billboard updated" : "Billboard created"
+  const toastMessage = initialData ? "Billboard updated." : "Billboard created."
   const action = initialData ? "Edit billboard" : "Create billboard"
 
   const form = useForm<BillboardFormValues>({
@@ -104,6 +105,23 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
       <Separator />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
+          <FormField
+            control={form.control}
+            name='imageUrl'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Background Image</FormLabel>
+                <FormControl>
+                  <ImageUpload
+                    value={field.value ? [field.value] : [] }
+                    disabled={loading}
+                    onChange={(url) => field.onChange(url)}
+                    onRemove={() => field.onChange("")}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
           <div className="grid grid-cols-3 gap-8">
             <FormField
               control={form.control}
@@ -112,7 +130,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                 <FormItem>
                   <FormLabel>Label</FormLabel>
                   <FormControl>
-                    <Input disabled={loading} placeholder="Store name" {...field} />
+                    <Input disabled={loading} placeholder="Billboard label" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
