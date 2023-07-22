@@ -49,6 +49,8 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
       toast.success("Store updated")
     } catch (error) {
       toast.error("Something went wrong")
+    } finally {
+      setLoading(false)
     }
   }
 
