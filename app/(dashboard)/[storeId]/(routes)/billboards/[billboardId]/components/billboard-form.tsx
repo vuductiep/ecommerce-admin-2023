@@ -2,7 +2,6 @@
 
 import { AlertModal } from "@/components/modals/alert-modal"
 import Heading from "@/components/ui/Heading"
-import { ApiAlert } from "@/components/ui/api-alert"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import ImageUpload from "@/components/ui/image-upload"
@@ -10,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { useOrigin } from "@/hooks/use-origin"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Billboard, Store } from "@prisma/client"
+import { Billboard } from "@prisma/client"
 import axios from "axios"
 import { Trash } from "lucide-react"
 import { useParams, useRouter } from "next/navigation"
@@ -39,7 +38,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
   const title = initialData ? "Edit a billboard" : "Create billboard"
   const description = initialData ? "Edit a billboard" : "Add a new billboard"
   const toastMessage = initialData ? "Billboard updated." : "Billboard created."
-  const action = initialData ? "Edit billboard" : "Create billboard"
+  const action = initialData ? "Save changes" : "Create"
 
   const form = useForm<BillboardFormValues>({
     resolver: zodResolver(formSchema),
@@ -50,7 +49,6 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
   })
   const params = useParams()
   const router = useRouter()
-  const myOrigin = useOrigin()
 
   const onSubmit = async (data: BillboardFormValues) => {
     try {
@@ -61,6 +59,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
         await axios.post(`/api/${params.storeId}/billboards`, data)
       }
       router.refresh()
+      router.push(`/${params.storeId}/billboards`)
       toast.success(toastMessage)
     } catch (error) {
       toast.error("Something went wrong")
@@ -74,7 +73,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
       setLoading(true)
       await axios.delete(`/api/${params.storeId}/billboards/${params.billboardId}`)
       router.refresh()
-      router.push('/')
+      router.push(`/${params.storeId}/billboards`)
       toast.success("Billboard deleted.")
     } catch (error) {
       toast.error("Make sure you removed all categories using this billboard first.")
@@ -148,12 +147,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
           </Button>
         </form>
       </Form>
-      <Separator />
-      <ApiAlert
-        title="test"
-        description={`${myOrigin}/api/${params.storeId}`}
-        variant="public"
-      />
+            
     </>
   )
 }
